@@ -30,6 +30,28 @@
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 20px 60px rgba(0,0,0,0.6);
         }
+        .nav {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .nav a {
+            color: #aac7ff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+        .nav a:hover {
+            background: rgba(255,215,0,0.15);
+            color: #ffd700;
+        }
+        .nav a.active {
+            color: #ffd700;
+            border-bottom: 2px solid #ffd700;
+        }
         h1 {
             font-size: 3rem;
             font-weight: 700;
@@ -85,11 +107,19 @@
             h1 { font-size: 2.2rem; }
             .sub { font-size: 1rem; }
             p { font-size: 1rem; }
+            .nav { gap: 15px; font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        
+        <!-- Navigation Bar -->
+        <div class="nav">
+            <a href="/" class="active">🏠 Home</a>
+            <a href="/about.html">ℹ️ About</a>
+        </div>
+
         <h1>🌊 Light Waves</h1>
         <div class="sub">✦ Season 1 ✦</div>
         <div class="divider"></div>
