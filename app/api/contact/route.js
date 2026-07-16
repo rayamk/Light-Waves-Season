@@ -1,17 +1,28 @@
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
 export async function POST(request) {
   try {
     const { name, email, message } = await request.json()
 
-    // Log ထုတ်ထားတယ်
-    console.log('📩 Contact Form:')
-    console.log('Name:', name)
-    console.log('Email:', email)
-    console.log('Message:', message)
+    const data = await resend.emails.send({
+      from: 'Contact Form <onboarding@resend.dev>',
+      to: ['rayamk@example.com'], // မင်းရဲ့ Email ထည့်ပါ
+      subject: `New Contact Form from ${name}`,
+      replyTo: email,
+      text: `
+Name: ${name}
+Email: ${email}
+Message:
+${message}
+      `,
+    })
 
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Your message has been received! ✅' 
+        message: '✅ Your message has been sent!' 
       }),
       {
         status: 200,
@@ -19,10 +30,11 @@ export async function POST(request) {
       }
     )
   } catch (error) {
+    console.error('Error:', error)
     return new Response(
       JSON.stringify({ 
         success: false, 
-        message: 'Something went wrong. ❌' 
+        message: '❌ Failed to send. Please try again.' 
       }),
       {
         status: 500,
