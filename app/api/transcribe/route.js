@@ -7,8 +7,24 @@ const models = [
   'gemini-3.5-flash',
   'gemini-3.1-flash-lite',
   'gemini-3.1-pro',
-  'gemini-3-flash'
+  'gemini-3-flash',
+  'gemini-2.0-flash-exp',
+  'gemini-1.5-pro',
+  'gemini-pro'
 ]
+
+const languageNames = {
+  'my': 'Burmese (မြန်မာ)',
+  'en': 'English',
+  'th': 'Thai (ไทย)',
+  'zh': 'Chinese (中文)',
+  'ja': 'Japanese (日本語)',
+  'ko': 'Korean (한국어)',
+  'hi': 'Hindi (हिन्दी)',
+  'fr': 'French',
+  'de': 'German',
+  'es': 'Spanish'
+}
 
 export async function POST(request) {
   try {
@@ -23,9 +39,9 @@ export async function POST(request) {
       )
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > 4.5 * 1024 * 1024) {
       return NextResponse.json(
-        { error: 'File too large. Max 10MB.' },
+        { error: 'File too large. Max 4.5MB.' },
         { status: 400 }
       )
     }
@@ -33,21 +49,21 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    const languageNames = {
-      'my': 'Burmese (မြန်မာ)',
-      'en': 'English',
-      'th': 'Thai (ไทย)',
-      'zh': 'Chinese (中文)',
-      'ja': 'Japanese (日本語)'
-    }
+    const prompt = `Please transcribe this audio accurately and generate SRT subtitle file.
 
-    const prompt = `Please transcribe this audio and generate SRT format subtitle with timestamps.
-                    Language: ${languageNames[language] || 'Burmese'}
-                    Break into segments of 2-5 seconds each.
-                    Format:
-                    1
-                    00:00:01,000 --> 00:00:04,000
-                    Transcription text here`
+Instructions:
+1. Listen carefully and transcribe exactly what is spoken
+2. Break into segments of 2-5 seconds each
+3. Use proper punctuation and capitalization
+4. If unsure about a word, make your best guess
+5. Output in standard SRT format:
+
+1
+00:00:01,000 --> 00:00:04,000
+Transcription text here
+
+Language: ${languageNames[language] || 'Burmese'}
+Audio file attached below.`
 
     let lastError = null
 
@@ -106,4 +122,4 @@ export async function POST(request) {
       { status: 500 }
     )
   }
-}
+          }
