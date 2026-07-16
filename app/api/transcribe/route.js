@@ -3,6 +3,13 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
+// စမ်းသုံးမယ့် Model စာရင်း
+const models = [
+  'gemini-2.0-flash-exp',
+  'gemini-1.5-pro',
+  'gemini-pro'
+]
+
 export async function POST(request) {
   try {
     const formData = await request.formData()
@@ -18,34 +25,51 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
+    let lastError = null
 
-    const result = await model.generateContent({
-      contents: [
-        {
-          role: 'user',
-          parts: [
+    // Model တစ်ခုချင်းစီကို စမ်းသုံးမယ်
+    for (const modelName of models) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName })
+
+        const result = await model.generateContent({
+          contents: [
             {
-              text: 'Please transcribe this audio and generate SRT format subtitle with timestamps.'
-            },
-            {
-              inlineData: {
-                mimeType: file.type,
-                data: buffer.toString('base64')
-              }
+              role: 'user',
+              parts: [
+                {
+                  text: 'Please transcribe this audio and generate SRT format subtitle with timestamps.'
+                },
+                {
+                  inlineData: {
+                    mimeType: file.type,
+                    data: buffer.toString('base64')
+                  }
+                }
+              ]
             }
           ]
-        }
-      ]
-    })
+        })
 
-    const response = await result.response
-    const text = response.text()
+        const text = result.response.text()
 
-    return NextResponse.json({
-      success: true,
-      srt: text
-    })
+        // အောင်မြင်ရင် SRT ကို ပြန်ပေးမယ်
+        return NextResponse.json({
+          success: true,
+          srt: text
+        })
+
+      } catch (error) {
+        lastError = error
+        continue // မအောင်ရင် နောက် Model ကို ဆက်စမ်းမယ်
+      }
+    }
+
+    // အကုန်မအောင်ရင် Error ပြန်ပေးမယ်
+    return NextResponse.json(
+      { error: 'All models failed. Last error: ' + lastError?.message },
+      { status: 500 }
+    )
 
   } catch (error) {
     console.error('Error:', error)
