@@ -6,6 +6,7 @@ export default function Home() {
       <div className="nav">
         <a href="/" className="active">🏠 Home</a>
         <a href="/about">ℹ️ About</a>
+        <a href="/contact">📬 Contact</a>
       </div>
       <h1>🌊 Light Waves</h1>
       <div className="sub">✦ Season 1 ✦</div>
