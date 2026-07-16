@@ -60,7 +60,7 @@ export default function Home() {
     <div className="container">
       {/* Logo & App Name */}
       <div className="logo-container">
-        <span className="logo-icon">🎵</span>
+        <span className="logo-icon">🌊</span>
         <div>
           <div className="app-name">WaveSub</div>
           <div className="app-subtitle">✦ Audio to SRT ✦</div>
