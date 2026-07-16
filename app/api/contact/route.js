@@ -8,7 +8,7 @@ export async function POST(request) {
 
     const data = await resend.emails.send({
       from: 'Contact Form <onboarding@resend.dev>',
-      to: ['khantaungmin304@gmail.com'], // မင်းရဲ့ Email ထည့်ပါ
+      to: ['khantaungmin304@gmail.com'],
       subject: `New Contact Form from ${name}`,
       replyTo: email,
       text: `
