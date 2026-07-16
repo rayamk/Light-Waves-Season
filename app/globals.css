@@ -3,6 +3,7 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #0a0a2a, #1a1a4e);
@@ -14,6 +15,7 @@ body {
     text-align: center;
     padding: 20px;
 }
+
 .container {
     max-width: 700px;
     padding: 40px 30px;
@@ -23,6 +25,47 @@ body {
     border: 1px solid rgba(255,255,255,0.1);
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
 }
+
+/* Logo Styles */
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.logo-icon {
+    font-size: 3.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 20px rgba(255,215,0,0.3));
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.app-name {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #f0e68c, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1px;
+}
+
+.app-subtitle {
+    font-size: 0.9rem;
+    color: #aac7ff;
+    letter-spacing: 3px;
+    margin-top: -5px;
+    font-weight: 300;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 .nav {
     display: flex;
     gap: 30px;
@@ -30,6 +73,7 @@ body {
     margin-bottom: 30px;
     font-size: 1.1rem;
 }
+
 .nav a {
     color: #aac7ff;
     text-decoration: none;
@@ -37,14 +81,17 @@ body {
     border-radius: 30px;
     transition: 0.3s;
 }
+
 .nav a:hover {
     background: rgba(255,215,0,0.15);
     color: #ffd700;
 }
+
 .nav a.active {
     color: #ffd700;
     border-bottom: 2px solid #ffd700;
 }
+
 h1 {
     font-size: 3rem;
     font-weight: 700;
@@ -55,6 +102,7 @@ h1 {
     letter-spacing: 2px;
     margin-bottom: 10px;
 }
+
 .sub {
     font-size: 1.3rem;
     color: #aac7ff;
@@ -62,6 +110,7 @@ h1 {
     letter-spacing: 4px;
     font-weight: 300;
 }
+
 .divider {
     width: 80px;
     height: 3px;
@@ -69,12 +118,14 @@ h1 {
     margin: 15px auto 25px;
     border-radius: 10px;
 }
+
 p {
     font-size: 1.15rem;
     line-height: 1.8;
     color: #cfdfff;
     margin-bottom: 30px;
 }
+
 .status {
     display: inline-block;
     padding: 10px 30px;
@@ -86,6 +137,7 @@ p {
     font-size: 0.95rem;
     letter-spacing: 1px;
 }
+
 .footer {
     margin-top: 35px;
     font-size: 0.8rem;
@@ -93,12 +145,16 @@ p {
     border-top: 1px solid rgba(255,255,255,0.06);
     padding-top: 20px;
 }
+
 .footer span {
     color: #ffd700;
 }
+
 @media (max-width: 480px) {
     h1 { font-size: 2.2rem; }
     .sub { font-size: 1rem; }
     p { font-size: 1rem; }
     .nav { gap: 15px; font-size: 0.95rem; }
+    .logo-icon { font-size: 2.5rem; }
+    .app-name { font-size: 1.6rem; }
 }
