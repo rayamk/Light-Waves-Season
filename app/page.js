@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import './globals.css'
 
+const MAX_FILE_SIZE = 4.5 * 1024 * 1024 // 4.5MB
+
 export default function Home() {
   const [file, setFile] = useState(null)
   const [language, setLanguage] = useState('my')
@@ -12,6 +14,11 @@ export default function Home() {
   const handleFileChange = (e) => {
     const selected = e.target.files[0]
     if (selected) {
+      if (selected.size > MAX_FILE_SIZE) {
+        setStatus('❌ File too large. Max 4.5MB.')
+        setFile(null)
+        return
+      }
       setFile(selected)
       setStatus('')
       setSrt('')
@@ -95,6 +102,11 @@ export default function Home() {
           <option value="th">🇹🇭 ไทย</option>
           <option value="zh">🇨🇳 中文</option>
           <option value="ja">🇯🇵 日本語</option>
+          <option value="ko">🇰🇷 한국어</option>
+          <option value="hi">🇮🇳 हिन्दी</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="es">🇪🇸 Spanish</option>
         </select>
       </div>
 
@@ -160,7 +172,7 @@ export default function Home() {
       )}
 
       <div style={{ marginTop: '40px', fontSize: '0.9rem', color: '#6688cc' }}>
-        Supported: MP3, MP4, WAV, M4A
+        Supported: MP3, MP4, WAV, M4A (Max 4.5MB)
       </div>
     </div>
   )
