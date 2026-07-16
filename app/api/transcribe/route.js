@@ -3,7 +3,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
-// စမ်းသုံးမယ့် Model စာရင်း
 const models = [
   'gemini-3.5-flash',
   'gemini-3.1-flash-lite',
@@ -15,6 +14,7 @@ export async function POST(request) {
   try {
     const formData = await request.formData()
     const file = formData.get('file')
+    const language = formData.get('language') || 'my'
 
     if (!file) {
       return NextResponse.json(
@@ -33,6 +33,22 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
+    const languageNames = {
+      'my': 'Burmese (မြန်မာ)',
+      'en': 'English',
+      'th': 'Thai (ไทย)',
+      'zh': 'Chinese (中文)',
+      'ja': 'Japanese (日本語)'
+    }
+
+    const prompt = `Please transcribe this audio and generate SRT format subtitle with timestamps.
+                    Language: ${languageNames[language] || 'Burmese'}
+                    Break into segments of 2-5 seconds each.
+                    Format:
+                    1
+                    00:00:01,000 --> 00:00:04,000
+                    Transcription text here`
+
     let lastError = null
 
     for (const modelName of models) {
@@ -47,12 +63,7 @@ export async function POST(request) {
               role: 'user',
               parts: [
                 {
-                  text: `Please transcribe this audio and generate SRT format subtitle with timestamps. 
-                         Break into segments of 2-5 seconds each.
-                         Format: 
-                         1
-                         00:00:01,000 --> 00:00:04,000
-                         Transcription text here`
+                  text: prompt
                 },
                 {
                   inlineData: {
