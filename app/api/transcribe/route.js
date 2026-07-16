@@ -3,9 +3,10 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
-// စမ်းသုံးမယ့် Model စာရင်း
+// စမ်းသုံးမယ့် Model စာရင်း - အခုခေတ်သုံး model များ
 const models = [
   'gemini-2.0-flash-exp',
+  'gemini-1.5-flash',
   'gemini-1.5-pro',
   'gemini-pro'
 ]
@@ -22,6 +23,14 @@ export async function POST(request) {
       )
     }
 
+    // File size check (Max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: 'File too large. Max 10MB.' },
+        { status: 400 }
+      )
+    }
+
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
@@ -30,6 +39,8 @@ export async function POST(request) {
     // Model တစ်ခုချင်းစီကို စမ်းသုံးမယ်
     for (const modelName of models) {
       try {
+        console.log(`Trying model: ${modelName}`)
+        
         const model = genAI.getGenerativeModel({ model: modelName })
 
         const result = await model.generateContent({
@@ -38,11 +49,16 @@ export async function POST(request) {
               role: 'user',
               parts: [
                 {
-                  text: 'Please transcribe this audio and generate SRT format subtitle with timestamps.'
+                  text: `Please transcribe this audio and generate SRT format subtitle with timestamps. 
+                         Break into segments of 2-5 seconds each.
+                         Format: 
+                         1
+                         00:00:01,000 --> 00:00:04,000
+                         Transcription text here`
                 },
                 {
                   inlineData: {
-                    mimeType: file.type,
+                    mimeType: file.type || 'audio/mpeg',
                     data: buffer.toString('base64')
                   }
                 }
@@ -53,13 +69,18 @@ export async function POST(request) {
 
         const text = result.response.text()
 
-        // အောင်မြင်ရင် SRT ကို ပြန်ပေးမယ်
-        return NextResponse.json({
-          success: true,
-          srt: text
-        })
+        // Check if response contains valid SRT format
+        if (text.includes('-->') && text.includes(':')) {
+          return NextResponse.json({
+            success: true,
+            srt: text
+          })
+        } else {
+          throw new Error('Invalid SRT format received')
+        }
 
       } catch (error) {
+        console.log(`Model ${modelName} failed:`, error.message)
         lastError = error
         continue // မအောင်ရင် နောက် Model ကို ဆက်စမ်းမယ်
       }
