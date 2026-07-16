@@ -3,12 +3,12 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
-// စမ်းသုံးမယ့် Model စာရင်း - အခုခေတ်သုံး model များ
+// စမ်းသုံးမယ့် Model စာရင်း (Google AI Studio မှ ရနိုင်သော နာမည်များ)
 const models = [
-  'gemini-2.0-flash-exp',
-  'gemini-1.5-flash',
-  'gemini-1.5-pro',
-  'gemini-pro'
+  'gemini-3.5-flash',
+  'gemini-3.1-flash-lite',
+  'gemini-3.1-pro',
+  'gemini-3-flash'
 ]
 
 export async function POST(request) {
@@ -36,7 +36,6 @@ export async function POST(request) {
 
     let lastError = null
 
-    // Model တစ်ခုချင်းစီကို စမ်းသုံးမယ်
     for (const modelName of models) {
       try {
         console.log(`Trying model: ${modelName}`)
@@ -82,11 +81,10 @@ export async function POST(request) {
       } catch (error) {
         console.log(`Model ${modelName} failed:`, error.message)
         lastError = error
-        continue // မအောင်ရင် နောက် Model ကို ဆက်စမ်းမယ်
+        continue
       }
     }
 
-    // အကုန်မအောင်ရင် Error ပြန်ပေးမယ်
     return NextResponse.json(
       { error: 'All models failed. Last error: ' + lastError?.message },
       { status: 500 }
