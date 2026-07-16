@@ -2,11 +2,6 @@
 
 import { useState } from 'react'
 
-export const metadata = {
-  title: 'Contact - Light Waves Season',
-  description: 'Light Waves Season ကို ဆက်သွယ်ရန်',
-}
-
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState('')
@@ -91,4 +86,4 @@ export default function Contact() {
       <a href="/" style={{ display: 'inline-block', marginTop: '20px', color: '#aac7ff', textDecoration: 'none' }}>← ပြန်သွား</a>
     </div>
   )
-}
+              }
