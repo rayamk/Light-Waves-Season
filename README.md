@@ -1,6 +1,6 @@
 # 🌊 WaveSub - Audio to SRT Subtitle Generator
 
-WaveSub က MP3, MP4, WAV, M4A ဖိုင်တွေကနေ SRT Subtitle ဖိုင် ထုတ်ပေးတဲ့ Web Application ဖြစ်တယ်။
+WaveSub က MP3, MP4, WAV, M4A ဖိုင်တွေကနေ SRT Subtitle ဖိုင် ထုတ်ပေးတဲ့ Web Application ဖြစ်ပါတယ်။
 
 ## 🚀 Live Demo
 
