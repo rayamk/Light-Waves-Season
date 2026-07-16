@@ -15,11 +15,9 @@ export async function POST(request) {
       )
     }
 
-    // File ကို Buffer ပြောင်းမယ်
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    // Gemini ကို ခေါ်မယ်
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
     const result = await model.generateContent({
