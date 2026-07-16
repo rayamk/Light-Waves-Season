@@ -58,7 +58,17 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>🎬 MP3/MP4 → SRT Subtitle</h1>
+      {/* Logo & App Name */}
+      <div className="logo-container">
+        <span className="logo-icon">🎵</span>
+        <div>
+          <div className="app-name">WaveSub</div>
+          <div className="app-subtitle">✦ Audio to SRT ✦</div>
+        </div>
+      </div>
+
+      <div className="divider"></div>
+
       <p style={{ color: '#aac7ff', marginBottom: '20px' }}>
         Upload your MP3 or MP4 file and get SRT subtitle file.
       </p>
@@ -174,6 +184,10 @@ export default function Home() {
       <div style={{ marginTop: '40px', fontSize: '0.9rem', color: '#6688cc' }}>
         Supported: MP3, MP4, WAV, M4A (Max 4.5MB)
       </div>
+
+      <div className="footer">
+        <span>⚡</span> WaveSub · <span>✦</span> 2026
+      </div>
     </div>
   )
-}
+            }
