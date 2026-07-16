@@ -1,4 +1,5 @@
 import 'app/globals.css'
+import { Analytics } from '@vercel/analytics/react'
 
 export const metadata = {
   title: 'Light Waves Season',
@@ -25,7 +26,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="my">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   )
 }
