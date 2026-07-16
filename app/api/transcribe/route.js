@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
 
-// စမ်းသုံးမယ့် Model စာရင်း (Google AI Studio မှ ရနိုင်သော နာမည်များ)
+// စမ်းသုံးမယ့် Model စာရင်း
 const models = [
   'gemini-3.5-flash',
   'gemini-3.1-flash-lite',
@@ -23,7 +23,6 @@ export async function POST(request) {
       )
     }
 
-    // File size check (Max 10MB)
     if (file.size > 10 * 1024 * 1024) {
       return NextResponse.json(
         { error: 'File too large. Max 10MB.' },
@@ -68,7 +67,6 @@ export async function POST(request) {
 
         const text = result.response.text()
 
-        // Check if response contains valid SRT format
         if (text.includes('-->') && text.includes(':')) {
           return NextResponse.json({
             success: true,
