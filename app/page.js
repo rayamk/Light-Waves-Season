@@ -6,12 +6,14 @@ import './globals.css'
 export default function Home() {
   const [file, setFile] = useState(null)
   const [status, setStatus] = useState('')
+  const [srt, setSrt] = useState('')
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0]
     if (selected) {
       setFile(selected)
       setStatus('')
+      setSrt('')
     }
   }
 
@@ -23,10 +25,26 @@ export default function Home() {
 
     setStatus('⏳ Uploading and processing...')
 
-    // API call ကို နောက်မှ ထည့်မယ်
-    setTimeout(() => {
-      setStatus('✅ File uploaded! (API coming soon)')
-    }, 1500)
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('/api/transcribe', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        setSrt(data.srt)
+        setStatus('✅ Subtitle generated successfully!')
+      } else {
+        setStatus('❌ ' + (data.error || 'Something went wrong.'))
+      }
+    } catch (error) {
+      setStatus('❌ Network error. Please try again.')
+    }
   }
 
   return (
@@ -76,9 +94,50 @@ export default function Home() {
         <p style={{ marginTop: '20px', color: '#aac7ff' }}>{status}</p>
       )}
 
+      {srt && (
+        <div style={{ marginTop: '20px', textAlign: 'left' }}>
+          <h3 style={{ color: '#ffd700' }}>📝 SRT Subtitle</h3>
+          <pre style={{
+            background: '#1a1a4e',
+            padding: '15px',
+            borderRadius: '8px',
+            color: '#cfdfff',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            maxHeight: '300px',
+            overflowY: 'auto'
+          }}>
+            {srt}
+          </pre>
+          <button
+            onClick={() => {
+              const blob = new Blob([srt], { type: 'text/plain' })
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = 'subtitle.srt'
+              a.click()
+              URL.revokeObjectURL(url)
+            }}
+            style={{
+              marginTop: '10px',
+              padding: '10px 30px',
+              borderRadius: '50px',
+              border: 'none',
+              background: '#ffd700',
+              color: '#0a0a2a',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            ⬇️ Download SRT
+          </button>
+        </div>
+      )}
+
       <div style={{ marginTop: '40px', fontSize: '0.9rem', color: '#6688cc' }}>
         Supported: MP3, MP4, WAV, M4A
       </div>
     </div>
   )
-        }
+          }
