@@ -5,6 +5,7 @@ import './globals.css'
 
 export default function Home() {
   const [file, setFile] = useState(null)
+  const [language, setLanguage] = useState('my')
   const [status, setStatus] = useState('')
   const [srt, setSrt] = useState('')
 
@@ -27,6 +28,7 @@ export default function Home() {
 
     const formData = new FormData()
     formData.append('file', file)
+    formData.append('language', language)
 
     try {
       const res = await fetch('/api/transcribe', {
@@ -72,6 +74,28 @@ export default function Home() {
             📁 {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
           </p>
         )}
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ color: '#aac7ff', marginRight: '10px' }}>🌐 Language:</label>
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          style={{
+            padding: '10px 20px',
+            borderRadius: '8px',
+            border: '1px solid #ffd700',
+            background: '#1a1a4e',
+            color: 'white',
+            fontSize: '1rem'
+          }}
+        >
+          <option value="my">🇲🇲 မြန်မာ</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="th">🇹🇭 ไทย</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="ja">🇯🇵 日本語</option>
+        </select>
       </div>
 
       <button
@@ -140,4 +164,4 @@ export default function Home() {
       </div>
     </div>
   )
-          }
+}
