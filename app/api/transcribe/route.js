@@ -18,7 +18,7 @@ export async function POST(request) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'model: 'gemini-pro' })
 
     const result = await model.generateContent({
       contents: [
